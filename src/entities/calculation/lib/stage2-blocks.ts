@@ -98,8 +98,9 @@ function calculateTensileStrength(
     (carbonContent + initialSize / 40 + unitReduction / 100) *
     (totalReduction * 100);
 
+  // В Excel LOG() = log₁₀, в JS используем Math.log10()
   const denominator =
-    Math.log(100 - totalReduction * 100) / 2 + 0.0005 * totalReduction * 100;
+    Math.log10(100 - totalReduction * 100) / 2 + 0.0005 * totalReduction * 100;
 
   const increment = numerator / denominator;
   const strength = prevStrength + increment;
