@@ -31,7 +31,7 @@ export const CALCULATION_COEFFICIENTS = {
  * Параметры блоков
  */
 export const BLOCK_PARAMETERS = {
-  MAX_BLOCKS: 11,                     // Максимальное количество блоков
+  MAX_BLOCKS: 19,                     // Максимальное количество блоков
   BLOCK_RPM_DIVISOR: 2.83,            // Делитель для расчета Block RPM
   MOTOR_RPM_MULTIPLIER: 1720,         // Множитель для расчета Motor RPM
 } as const;
@@ -51,7 +51,7 @@ export const PRODUCTION_PARAMETERS = {
 export const VALIDATION_RANGES = {
   initialWireSize: { min: 4, max: 8 },              // Диаметр заготовки, мм
   finalWireSize: { min: 0.8, max: 4 },              // Диаметр проволоки, мм
-  totalTransitions: { min: 1, max: 11 },            // Количество переходов
+  totalTransitions: { min: 1, max: 19 },            // Количество переходов
   drawingVelocity: { min: 0.1, max: 20 },           // Скорость волочения, м/с
   startBlock: { min: 1, max: 10 },                  // Начальный блок
   lastDieReduction: { min: 0, max: 100 },           // Обжатие, %

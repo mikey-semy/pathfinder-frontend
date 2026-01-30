@@ -24,10 +24,10 @@ export function formDataToInputParams(
       max: formData.patentedTensileStrengthMax,
     },
     totalTransitions: formData.totalTransitions,
-    unitReduction: formData.unitReduction,
+    unitReduction: 0, // Не используется, задается по умолчанию
     drawingVelocity: formData.drawingVelocity,
     startBlock: formData.startBlock,
-    lastDieReduction: formData.lastDieReduction,
+    lastDieReduction: 20, // Не используется, задается по умолчанию
   };
 }
 
@@ -46,9 +46,7 @@ export function inputParamsToFormData(
     patentedTensileStrengthMin: params.patentedTensileStrength.min,
     patentedTensileStrengthMax: params.patentedTensileStrength.max,
     totalTransitions: params.totalTransitions,
-    unitReduction: params.unitReduction,
     drawingVelocity: params.drawingVelocity,
     startBlock: params.startBlock,
-    lastDieReduction: params.lastDieReduction,
   };
 }

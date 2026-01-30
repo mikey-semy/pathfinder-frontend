@@ -12,13 +12,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { RotateCcw, Calculator, Loader2 } from 'lucide-react';
 import {
   pathfinderFormSchema,
@@ -26,12 +19,10 @@ import {
   type PathfinderFormData,
 } from '../model/schema';
 import { formDataToInputParams } from '../model/types';
-import {
-  calculateWireDrawingRoute,
-  getSteelGradeById,
-  getSteelGradeOptions,
-} from '@/entities/calculation';
+import { calculateWireDrawingRoute } from '@/entities/calculation';
 import type { CalculationResult } from '@/entities/calculation';
+import { SteelGradeSelector } from '@/features/steel-grade-selector';
+import { type SteelGrade } from '@/shared/store';
 
 interface CalculationFormProps {
   onCalculate?: (result: CalculationResult) => void;
@@ -57,22 +48,19 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
   });
 
   // Обработчик выбора марки стали
-  const handleSteelGradeChange = (gradeId: string) => {
+  const handleSteelGradeChange = (gradeId: string, grade: SteelGrade | undefined) => {
     setSelectedSteelGrade(gradeId);
-    const grade = getSteelGradeById(gradeId);
 
     if (grade) {
-      if (gradeId === 'custom') {
-        setIsCustomSteel(true);
-      } else {
-        setIsCustomSteel(false);
-        // Автозаполнение полей
-        setValue('rodType', gradeId);
-        setValue('carbonContentMin', grade.carbonContent.min);
-        setValue('carbonContentMax', grade.carbonContent.max);
-        setValue('patentedTensileStrengthMin', grade.tensileStrength.min);
-        setValue('patentedTensileStrengthMax', grade.tensileStrength.max);
-      }
+      setIsCustomSteel(false);
+      // Автозаполнение полей
+      setValue('rodType', grade.name);
+      setValue('carbonContentMin', grade.carbonContent.min);
+      setValue('carbonContentMax', grade.carbonContent.max);
+      setValue('patentedTensileStrengthMin', grade.tensileStrength.min);
+      setValue('patentedTensileStrengthMax', grade.tensileStrength.max);
+    } else {
+      setIsCustomSteel(true);
     }
   };
 
@@ -106,30 +94,11 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Марка стали */}
-              <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="steelGrade">
-                  Марка стали <span className="text-destructive">*</span>
-                </Label>
-                <Select
+              <div className="md:col-span-2">
+                <SteelGradeSelector
                   value={selectedSteelGrade}
-                  onValueChange={handleSteelGradeChange}
-                >
-                  <SelectTrigger id="steelGrade">
-                    <SelectValue placeholder="Выберите марку стали" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {getSteelGradeOptions().map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {!isCustomSteel && (
-                  <p className="text-xs text-muted-foreground">
-                    Параметры марки будут автоматически заполнены ниже
-                  </p>
-                )}
+                  onChange={handleSteelGradeChange}
+                />
               </div>
 
               {/* Диаметр заготовки */}
@@ -364,46 +333,6 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
                 )}
               </div>
 
-              {/* 1 ед. обжатие */}
-              <div className="space-y-2">
-                <Label htmlFor="unitReduction">
-                  1 ед. обжатие (%)
-                </Label>
-                <Input
-                  id="unitReduction"
-                  type="number"
-                  step="0.01"
-                  placeholder="0"
-                  {...register('unitReduction', { valueAsNumber: true })}
-                  className={errors.unitReduction ? 'border-destructive' : ''}
-                />
-                {errors.unitReduction && (
-                  <p className="text-sm text-destructive">
-                    {errors.unitReduction.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Обжатие в последней волоке */}
-              <div className="space-y-2">
-                <Label htmlFor="lastDieReduction">
-                  Обжатие в последней волоке (%){' '}
-                  <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="lastDieReduction"
-                  type="number"
-                  step="0.01"
-                  placeholder="20"
-                  {...register('lastDieReduction', { valueAsNumber: true })}
-                  className={errors.lastDieReduction ? 'border-destructive' : ''}
-                />
-                {errors.lastDieReduction && (
-                  <p className="text-sm text-destructive">
-                    {errors.lastDieReduction.message}
-                  </p>
-                )}
-              </div>
             </div>
           </div>
 

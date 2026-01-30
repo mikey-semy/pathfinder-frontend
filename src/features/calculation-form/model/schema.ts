@@ -67,13 +67,7 @@ export const pathfinderFormSchema = z
       .number()
       .int('Должно быть целым числом')
       .min(VALIDATION_RANGES.totalTransitions.min, 'Минимум 1 переход')
-      .max(VALIDATION_RANGES.totalTransitions.max, 'Максимум 11 переходов'),
-
-    // 1 ед. обжатие
-    unitReduction: z
-      .number()
-      .min(0, 'Минимум 0%')
-      .max(100, 'Максимум 100%'),
+      .max(VALIDATION_RANGES.totalTransitions.max, 'Максимум 19 переходов'),
 
     // Скорость волочения
     drawingVelocity: z
@@ -93,12 +87,6 @@ export const pathfinderFormSchema = z
       .int('Должно быть целым числом')
       .min(VALIDATION_RANGES.startBlock.min, 'Минимум блок 1')
       .max(VALIDATION_RANGES.startBlock.max, 'Максимум блок 10'),
-
-    // Обжатие в последней волоке
-    lastDieReduction: z
-      .number()
-      .min(VALIDATION_RANGES.lastDieReduction.min, 'Минимум 0%')
-      .max(VALIDATION_RANGES.lastDieReduction.max, 'Максимум 100%'),
   })
   // Перекрестная валидация
   .refine((data) => data.finalWireSize < data.initialWireSize, {
@@ -126,7 +114,7 @@ export type PathfinderFormData = z.infer<typeof pathfinderFormSchema>;
  * Значения по умолчанию для формы
  */
 export const defaultFormValues: PathfinderFormData = {
-  rodType: 'k85',
+  rodType: 'K85',
   initialWireSize: 4.0,
   finalWireSize: 1.3,
   carbonContentMin: 0.75,
@@ -134,8 +122,6 @@ export const defaultFormValues: PathfinderFormData = {
   patentedTensileStrengthMin: 130,
   patentedTensileStrengthMax: 133,
   totalTransitions: 9,
-  unitReduction: 0,
   drawingVelocity: 9.0,
   startBlock: 1,
-  lastDieReduction: 20,
 };

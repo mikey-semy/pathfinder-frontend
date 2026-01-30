@@ -176,6 +176,18 @@
     font-weight: bold !important;
   }
 
+  /* Инпуты в таблице - убираем стили */
+  table input {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    height: auto !important;
+    width: auto !important;
+    text-align: center !important;
+    font-size: 7pt !important;
+  }
+
   /* Значения результатов */
   .text-2xl {
     font-size: 9pt !important;
@@ -250,6 +262,33 @@
   .print-charts [class*="CardTitle"] {
     font-size: 10pt !important;
   }
+}
+
+/* Анимация подсветки измененных значений (цвет текста) */
+@keyframes text-highlight-light {
+  0% {
+    color: hsl(140 70% 35%);
+  }
+  100% {
+    color: inherit;
+  }
+}
+
+@keyframes text-highlight-dark {
+  0% {
+    color: hsl(140 70% 55%);
+  }
+  100% {
+    color: inherit;
+  }
+}
+
+.animate-highlight td {
+  animation: text-highlight-light 1s ease-out;
+}
+
+.dark .animate-highlight td {
+  animation: text-highlight-dark 1s ease-out;
 }
 
 @theme inline {

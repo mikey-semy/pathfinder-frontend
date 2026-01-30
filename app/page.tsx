@@ -7,10 +7,10 @@
 
 import { CalculationForm } from '@/features/calculation-form';
 import { ResultsTable } from '@/features/results-display';
-import { ResultsCharts } from '@/features/results-charts';
 import { CalculationHistory } from '@/features/calculation-history';
 import { ExportButton } from '@/features/results-export';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
+import { HelpModal } from '@/shared/ui/HelpModal';
 import { useCalculationStore } from '@/shared/store';
 import type { CalculationResult } from '@/entities/calculation';
 
@@ -66,12 +66,15 @@ export default function Home() {
           >
             PathFinder
           </h1>
-          <p
-            className="text-xs sm:text-sm no-print"
-            style={{ color: "hsl(var(--muted-foreground))" }}
-          >
-            Расчет маршрутов волочения
-          </p>
+          <div className="flex items-center gap-2 no-print">
+            <p
+              className="text-xs sm:text-sm"
+              style={{ color: "hsl(var(--muted-foreground))" }}
+            >
+              Расчет маршрутов волочения
+            </p>
+            <HelpModal />
+          </div>
           {/* Дата для печати */}
           {currentResult && (
             <p className="hidden print:block text-xs">
@@ -101,14 +104,13 @@ export default function Home() {
               >
                 Результаты расчета
               </h2>
-              <ExportButton result={currentResult} />
+              <ExportButton />
             </div>
 
             {/* Входные данные - только для печати */}
             <PrintInputs result={currentResult} />
 
             <ResultsTable result={currentResult} />
-            <ResultsCharts result={currentResult} />
           </div>
         )}
 
