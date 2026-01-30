@@ -75,32 +75,41 @@ function calculateTotalReductionAtBlock(initialSize: number, currentDiameter: nu
 
 /**
  * Расчет предела прочности σв
- * Сложная формула из Excel (строка 20-21):
- * SUM(prevStrength + (0.6 * (carbonContent + INSIZE/40 + unitReduction) * (totalReduction * 100)) /
- * (SUM((LOG(100 - totalReduction * 100))/2) + 0.0005 * totalReduction * 100))
+ * Формула из Excel (строка 20-21):
+ * D13 + (0.6 * ($D$12 + INSIZE/40 + N18) * (N$17 * 100)) / ((LOG(100 - N$17*100))/2 + 0.0005 * N$17*100)
+ *
+ * Где:
+ * - N$17 = общее обжатие (totalReduction) в процентах (например 89.44 для 89.44%)
+ * - N18 = единичное обжатие блока (unitReduction) в процентах (например 19.9 для 19.9%)
  *
  * @param prevStrength - Предыдущий предел прочности, кгс/мм²
- * @param carbonContent - Содержание углерода, %
+ * @param carbonContent - Содержание углерода (0.82 для 82%)
  * @param initialSize - Начальный диаметр, мм
- * @param unitReduction - Единичное обжатие, %
- * @param totalReduction - Общее обжатие, %
+ * @param totalReduction - Общее обжатие N$17, % (89.44 для 89.44%)
+ * @param unitReduction - Единичное обжатие блока N18, % (19.9 для 19.9%)
  * @returns Предел прочности, кгс/мм²
  */
 function calculateTensileStrength(
   prevStrength: number,
   carbonContent: number,
   initialSize: number,
-  unitReduction: number,
-  totalReduction: number
+  totalReduction: number,
+  unitReduction: number
 ): number {
+  // N$17 = общее обжатие (totalReduction) в процентах
+  // N18 = единичное обжатие блока (unitReduction) в процентах
+
+  // Numerator: 0.6 * (carbonContent + INSIZE/40 + N18) * (N$17 * 100)
+  // N18 делим на 100 чтобы привести к доле для сложения с carbonContent
   const numerator =
     0.6 *
     (carbonContent + initialSize / 40 + unitReduction / 100) *
-    (totalReduction * 100);
+    totalReduction;
 
   // В Excel LOG() = log₁₀, в JS используем Math.log10()
+  // Denominator: (LOG(100 - N$17*100))/2 + 0.0005 * N$17*100
   const denominator =
-    Math.log10(100 - totalReduction * 100) / 2 + 0.0005 * totalReduction * 100;
+    Math.log10(100 - totalReduction) / 2 + 0.0005 * totalReduction;
 
   const increment = numerator / denominator;
   const strength = prevStrength + increment;
@@ -314,20 +323,23 @@ export function calculateBlocksStage(
     const strain = calculateStrain(initialWireSize, diameter);
 
     // Расчет прочности (два варианта по углероду)
+    // D13 в Excel = начальная прочность патентованной заготовки (не накопленная!)
+    // totalReductionValue = общее обжатие (N$17) в процентах
+    // unitReductionValue = единичное обжатие блока (N18) в процентах
     const strengthMin = calculateTensileStrength(
-      previousStrengthMin,
+      patentedTensileStrength.min,
       carbonContent.min,
       initialWireSize,
-      unitReductionValue,
-      totalReductionValue / 100
+      totalReductionValue,
+      unitReductionValue
     );
 
     const strengthMax = calculateTensileStrength(
-      previousStrengthMax,
+      patentedTensileStrength.max,
       carbonContent.max,
       initialWireSize,
-      unitReductionValue,
-      totalReductionValue / 100
+      totalReductionValue,
+      unitReductionValue
     );
 
     // Используем среднее значение для последующих расчетов
