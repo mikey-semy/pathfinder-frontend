@@ -196,19 +196,19 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm table-fixed">
+          <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
+            <table className="w-full text-sm min-w-[600px]">
               <thead>
                 <tr className="border-b">
-                  <th className="w-[6%] text-center p-2 font-semibold cursor-help" title="Номер блока волочения">Блок</th>
-                  <th className="w-[11%] text-center p-2 font-semibold cursor-help" title="Единичное обжатие на данном переходе (%)"><div>Обжатие</div><div className="font-normal text-xs">%</div></th>
-                  <th className="w-[11%] text-center p-2 font-semibold cursor-help" title="Диаметр проволоки после прохода через волоку (мм)"><div>Диаметр</div><div className="font-normal text-xs">мм</div></th>
-                  <th className="w-[11%] text-center p-2 font-semibold cursor-help" title="Временное сопротивление разрыву - минимальное (кгс/мм²)"><div>σв</div><div className="font-normal text-xs">мин</div></th>
-                  <th className="w-[11%] text-center p-2 font-semibold cursor-help" title="Временное сопротивление разрыву - максимальное (кгс/мм²)"><div>σв</div><div className="font-normal text-xs">макс</div></th>
-                  <th className="w-[11%] text-center p-2 font-semibold cursor-help" title="Временное сопротивление разрыву - расчетное (кгс/мм²)"><div>σв</div><div className="font-normal text-xs">расч</div></th>
-                  <th className="w-[13%] text-center p-2 font-semibold cursor-help" title="Скорость волочения на данном блоке (м/с)"><div>Скорость</div><div className="font-normal text-xs">м/с</div></th>
-                  <th className="w-[13%] text-center p-2 font-semibold cursor-help" title="Усилие волочения (кгс)"><div>Усилие</div><div className="font-normal text-xs">кгс</div></th>
-                  <th className="w-[13%] text-center p-2 font-semibold cursor-help" title="Мощность, потребляемая на данном блоке (кВт)"><div>Мощность</div><div className="font-normal text-xs">кВт</div></th>
+                  <th className="sticky left-0 z-10 bg-card w-12 text-center p-2 font-semibold cursor-help" title="Номер блока волочения">Блок</th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Единичное обжатие на данном переходе (%)"><div>Обжатие</div><div className="font-normal text-xs">%</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Диаметр проволоки после прохода через волоку (мм)"><div>Диаметр</div><div className="font-normal text-xs">мм</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[60px]" title="Временное сопротивление разрыву - минимальное (кгс/мм²)"><div>σв</div><div className="font-normal text-xs">мин</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[60px]" title="Временное сопротивление разрыву - максимальное (кгс/мм²)"><div>σв</div><div className="font-normal text-xs">макс</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[60px]" title="Временное сопротивление разрыву - расчетное (кгс/мм²)"><div>σв</div><div className="font-normal text-xs">расч</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Скорость волочения на данном блоке (м/с)"><div>Скорость</div><div className="font-normal text-xs">м/с</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Усилие волочения (кгс)"><div>Усилие</div><div className="font-normal text-xs">кгс</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Мощность, потребляемая на данном блоке (кВт)"><div>Мощность</div><div className="font-normal text-xs">кВт</div></th>
                 </tr>
               </thead>
               <tbody>
@@ -220,7 +220,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                       className={`hover:bg-primary/10 cursor-default transition-colors ${index % 2 === 0 ? 'bg-muted/50' : ''}`}
                     >
                       <td
-                        className={`p-2 text-center font-medium ${isAverageBlock ? 'text-red-500' : ''}`}
+                        className={`sticky left-0 z-10 p-2 text-center font-medium ${isAverageBlock ? 'text-red-500' : ''} ${index % 2 === 0 ? 'bg-muted/50' : 'bg-card'}`}
                         title={isAverageBlock ? 'Блок со средним обжатием' : undefined}
                       >
                         {block.blockNumber}
@@ -241,19 +241,19 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
           </div>
 
           {/* Дополнительная таблица с остальными параметрами */}
-          <div className="mt-6 overflow-x-auto">
+          <div className="mt-6 overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
             <h4 className="font-semibold mb-3">Дополнительные параметры</h4>
-            <table className="w-full text-sm table-fixed">
+            <table className="w-full text-sm min-w-[600px]">
               <thead>
                 <tr className="border-b">
-                  <th className="w-[6%] text-center p-2 font-semibold cursor-help" title="Номер блока волочения">Блок</th>
-                  <th className="w-[11%] text-center p-2 font-semibold cursor-help" title="Суммарное (общее) обжатие от начала до данного блока (%)"><div>Σ Обжатие</div><div className="font-normal text-xs">%</div></th>
-                  <th className="w-[11%] text-center p-2 font-semibold cursor-help" title="Повышение температуры проволоки (°C)"><div>Темп.</div><div className="font-normal text-xs">°C</div></th>
-                  <th className="w-[11%] text-center p-2 font-semibold cursor-help" title="Повышение температуры проволоки (°F)"><div>Темп.</div><div className="font-normal text-xs">°F</div></th>
-                  <th className="w-[13%] text-center p-2 font-semibold cursor-help" title="Обороты в минуту барабана блока"><div>RPM</div><div className="font-normal text-xs">блока</div></th>
-                  <th className="w-[13%] text-center p-2 font-semibold cursor-help" title="Обороты в минуту электродвигателя"><div>RPM</div><div className="font-normal text-xs">мотора</div></th>
-                  <th className="w-[13%] text-center p-2 font-semibold cursor-help" title="Полезная мощность на валу (кВт)"><div>Полезн.</div><div className="font-normal text-xs">мощность</div></th>
-                  <th className="w-[13%] text-center p-2 font-semibold cursor-help" title="Напряжение деформации (безразмерная величина)"><div>Напряж.</div></th>
+                  <th className="sticky left-0 z-10 bg-card w-12 text-center p-2 font-semibold cursor-help" title="Номер блока волочения">Блок</th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Суммарное (общее) обжатие от начала до данного блока (%)"><div>Σ Обжатие</div><div className="font-normal text-xs">%</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[60px]" title="Повышение температуры проволоки (°C)"><div>Темп.</div><div className="font-normal text-xs">°C</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[60px]" title="Повышение температуры проволоки (°F)"><div>Темп.</div><div className="font-normal text-xs">°F</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Обороты в минуту барабана блока"><div>RPM</div><div className="font-normal text-xs">блока</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Обороты в минуту электродвигателя"><div>RPM</div><div className="font-normal text-xs">мотора</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Полезная мощность на валу (кВт)"><div>Полезн.</div><div className="font-normal text-xs">мощность</div></th>
+                  <th className="text-center p-2 font-semibold cursor-help min-w-[70px]" title="Напряжение деформации (безразмерная величина)"><div>Напряж.</div></th>
                 </tr>
               </thead>
               <tbody>
@@ -265,7 +265,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                       className={`hover:bg-primary/10 cursor-default transition-colors ${index % 2 === 0 ? 'bg-muted/50' : ''}`}
                     >
                       <td
-                        className={`p-2 text-center font-medium ${isAverageBlock ? 'text-red-500' : ''}`}
+                        className={`sticky left-0 z-10 p-2 text-center font-medium ${isAverageBlock ? 'text-red-500' : ''} ${index % 2 === 0 ? 'bg-muted/50' : 'bg-card'}`}
                         title={isAverageBlock ? 'Блок со средним обжатием' : undefined}
                       >
                         {block.blockNumber}

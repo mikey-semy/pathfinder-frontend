@@ -415,9 +415,10 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
                 variant="outline"
                 onClick={() => reset()}
                 disabled={!isDirty}
+                className="shrink-0"
               >
-                <RotateCcw className="h-4 w-4 mr-2" />
-                Очистить
+                <RotateCcw className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Очистить</span>
               </Button>
               <Button
                 type="submit"
