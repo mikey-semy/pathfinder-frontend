@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PathFinder
 
-## Getting Started
+Система расчета маршрутов волочения стальной проволоки. Веб-приложение для технологов и инженеров металлургических предприятий.
 
-First, run the development server:
+## Возможности
+
+- Расчет технологических маршрутов волочения
+- Поддержка различных марок стали (K70-K90)
+- Расчет по блокам: диаметры, обжатия, скорости, усилия, мощности
+- Визуализация результатов (графики)
+- Экспорт в Excel и печать/PDF
+- История расчетов с локальным хранением
+- Адаптивный интерфейс (desktop/mobile)
+- Светлая и темная тема
+
+## Технологии
+
+- **Next.js 15** - React фреймворк с App Router
+- **TypeScript** - строгая типизация
+- **Tailwind CSS v4** - стилизация
+- **shadcn/ui** - UI компоненты
+- **Recharts** - графики
+- **Zustand** - state management
+- **React Hook Form + Zod** - формы и валидация
+
+## Быстрый старт
+
+### Разработка
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Откройте [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production сборка
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+### Docker
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+docker build -t pathfinder .
+docker run -p 3000:3000 pathfinder
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Структура проекта
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+pathfinder-frontend/
+├── app/                      # Next.js App Router
+├── src/
+│   ├── entities/             # Бизнес-сущности
+│   │   └── calculation/      # Движок расчетов
+│   ├── features/             # Фичи приложения
+│   │   ├── calculation-form/ # Форма ввода
+│   │   ├── calculation-history/
+│   │   ├── results-display/  # Таблицы результатов
+│   │   ├── results-charts/   # Графики
+│   │   └── results-export/   # Экспорт
+│   └── shared/               # Общие компоненты
+│       ├── ui/
+│       └── store/
+├── components/ui/            # shadcn/ui компоненты
+└── docs/                     # Документация
+```
 
-## Deploy on Vercel
+## Документация
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [Быстрый старт](docs/QUICK_START.md)
+- [Описание функций](docs/FEATURES.md)
+- [Верификация формул](docs/FORMULA_VERIFICATION.md)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Лицензия
+
+MIT

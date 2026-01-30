@@ -1,26 +1,279 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* СВЕТЛАЯ тема */
+    --background: 0 0% 100%;
+    --foreground: 222.2 47% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47% 20%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 85%;
+    --input: 214.3 31.8% 85%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* ТЕМНАЯ тема - более мягкие цвета */
+    --background: 222 20% 12%;
+    --foreground: 210 20% 85%;
+    --card: 222 20% 16%;
+    --card-foreground: 210 20% 85%;
+    --popover: 222 20% 22%;
+    --popover-foreground: 210 20% 90%;
+    --primary: 210 40% 70%;
+    --primary-foreground: 222 20% 12%;
+    --secondary: 222 15% 25%;
+    --secondary-foreground: 210 20% 85%;
+    --muted: 222 15% 20%;
+    --muted-foreground: 210 15% 55%;
+    --accent: 222 15% 25%;
+    --accent-foreground: 210 20% 90%;
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 222 15% 30%;
+    --input: 222 15% 25%;
+    --ring: 210 40% 70%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Стили для печати */
+@media print {
+  /* Страница 1 - портрет для данных */
+  @page {
+    size: A4 portrait;
+    margin: 8mm;
+  }
+
+  /* Страница 2 - ландшафт для графиков */
+  @page landscape {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  /* Скрываем ненужные элементы */
+  .no-print,
+  button,
+  .print-hide {
+    display: none !important;
+  }
+
+  /* Показываем элементы только для печати */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Сброс фона и цветов для печати */
+  body, html, div, section, article, header, main {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    font-size: 8pt;
+    line-height: 1.15;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Контейнер */
+  .container {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Карточки - компактные */
+  [class*="rounded-xl"],
+  [class*="rounded-lg"] {
+    border: 1px solid #ccc !important;
+    border-radius: 2px !important;
+    margin-bottom: 2mm !important;
+    padding: 1.5mm !important;
+    page-break-inside: avoid;
+  }
+
+  /* Заголовки секций */
+  h1, h2, h3, h4 {
+    color: black !important;
+    page-break-after: avoid;
+    margin: 1mm 0 !important;
+  }
+
+  h1 { font-size: 14pt !important; font-weight: bold !important; }
+  h2 { font-size: 12pt !important; font-weight: bold !important; }
+  h3 { font-size: 10pt !important; font-weight: 600 !important; }
+  h4 { font-size: 9pt !important; font-weight: 600 !important; }
+
+  /* Заголовки карточек */
+  [class*="CardTitle"] {
+    font-size: 10pt !important;
+    font-weight: bold !important;
+  }
+
+  /* Описания карточек - компактнее */
+  [class*="CardDescription"] {
+    font-size: 7pt !important;
+    margin-top: 0 !important;
+  }
+
+  /* CardHeader и CardContent компактнее */
+  [class*="CardHeader"] {
+    padding: 1mm 2mm !important;
+  }
+
+  [class*="CardContent"] {
+    padding: 1mm 2mm !important;
+  }
+
+
+  /* Таблицы - компактные */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 7pt !important;
+  }
+
+  th, td {
+    border: 1px solid #aaa !important;
+    padding: 0.5pt 2pt !important;
+  }
+
+  th {
+    background: #eee !important;
+    font-weight: bold !important;
+  }
+
+  /* Значения результатов */
+  .text-2xl {
+    font-size: 9pt !important;
+    font-weight: bold !important;
+  }
+
+  /* Подписи в секциях */
+  .text-sm.text-muted-foreground {
+    font-size: 7pt !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Grid и spacing компактнее */
+  .grid {
+    gap: 1.5mm !important;
+  }
+
+  .space-y-6 {
+    gap: 2mm !important;
+  }
+
+  .space-y-1 {
+    gap: 0.5mm !important;
+  }
+
+  /* Убираем overflow */
+  .overflow-x-auto {
+    overflow: visible !important;
+  }
+
+  /* Входные параметры - компактно */
+  .print-inputs {
+    margin-bottom: 2mm !important;
+    padding: 2mm !important;
+    border: 1px solid #ccc !important;
+  }
+
+  .print-inputs h3 {
+    font-size: 10pt !important;
+    margin-bottom: 1mm !important;
+  }
+
+  /* Базовые + Итоговые в ряд */
+  .print-summary-row {
+    display: flex !important;
+    gap: 3mm !important;
+    margin-bottom: 2mm !important;
+  }
+
+  .print-summary-row > div {
+    flex: 1 !important;
+  }
+
+  /* Графики - на новой странице в ландшафте */
+  .print-charts {
+    page: landscape;
+    page-break-before: always;
+    page-break-inside: avoid;
+  }
+
+  .print-charts > div {
+    margin-bottom: 3mm !important;
+  }
+
+  /* Карточки графиков - без границ */
+  .print-charts [class*="rounded"] {
+    padding: 2mm !important;
+    margin-bottom: 2mm !important;
+    border: none !important;
+  }
+
+  .print-charts [class*="CardTitle"] {
+    font-size: 10pt !important;
+  }
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Цвета для Tailwind v4 */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
 }
