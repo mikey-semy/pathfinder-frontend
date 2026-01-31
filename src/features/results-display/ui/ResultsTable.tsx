@@ -477,20 +477,20 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">σв мин / макс</p>
-                <p className="text-2xl font-semibold">
+                <p className="text-sm text-muted-foreground">σв мин/макс</p>
+                <p className="text-xl font-semibold whitespace-nowrap">
                   {finalStrengthMin.toFixed(0)}-{finalStrengthMax.toFixed(0)} кгс/мм²
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm text-muted-foreground">ВСР ГП (Н/мм²)</p>
-                <p className="text-2xl font-semibold" style={{ color: 'hsl(140 60% 45%)' }}>
-                  {vsrGpMin}-{vsrGpMax}
+                <p className="text-sm text-muted-foreground">ВСР ГП</p>
+                <p className="text-xl font-semibold whitespace-nowrap" style={{ color: 'hsl(140 60% 45%)' }}>
+                  {vsrGpMin}-{vsrGpMax} Н/мм²
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Удлинение</p>
-                <p className="text-2xl font-semibold">{summary.wireElongation.toFixed(2)}</p>
+                <p className="text-xl font-semibold">{summary.wireElongation.toFixed(2)}%</p>
               </div>
             </div>
           </CardContent>
@@ -510,10 +510,10 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
         </div>
         <div className="flex-1 border p-2 rounded">
           <h3 className="font-bold mb-1">Итоговые показатели</h3>
-          <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-            <div><span className="text-gray-600 text-xs">σв мин/макс:</span> <strong>{finalStrengthMin.toFixed(0)}-{finalStrengthMax.toFixed(0)}</strong></div>
+          <div className="flex flex-col gap-y-1">
+            <div><span className="text-gray-600 text-xs">σв мин/макс:</span> <strong>{finalStrengthMin.toFixed(0)}-{finalStrengthMax.toFixed(0)} кгс/мм²</strong></div>
             <div><span className="text-gray-600 text-xs">ВСР ГП:</span> <strong>{vsrGpMin}-{vsrGpMax} Н/мм²</strong></div>
-            <div><span className="text-gray-600 text-xs">Удлинение:</span> <strong>{summary.wireElongation.toFixed(2)}</strong></div>
+            <div><span className="text-gray-600 text-xs">Удлинение:</span> <strong>{summary.wireElongation.toFixed(2)}%</strong></div>
           </div>
         </div>
       </div>
@@ -522,16 +522,16 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
       <Card>
         <CardHeader>
           <CardTitle>Расчет по блокам</CardTitle>
-          <CardDescription>
+          <CardDescription className="print:hidden">
             Редактируйте значения и нажмите Enter или кликните вне ячейки. Последняя строка имеет фиксированный диаметр.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0">
-            <table className="w-full text-sm min-w-[700px]">
+          <div className="overflow-x-auto -mx-6 px-6 md:mx-0 md:px-0 print:mx-0 print:px-0 print:overflow-visible">
+            <table className="w-full text-sm min-w-[700px] print:min-w-0 print:table-fixed print:border-collapse print:[&_th]:border print:[&_th]:border-gray-300 print:[&_td]:border print:[&_td]:border-gray-300">
               <thead>
                 <tr className="border-b">
-                  <th className="sticky left-0 z-10 bg-card w-12 text-center p-2 font-semibold">Блок</th>
+                  <th className="sticky left-0 z-10 bg-card w-12 text-center p-2 font-semibold print:static print:bg-transparent">Блок</th>
                   <th className="text-center p-2 font-semibold min-w-[80px]">
                     <div>Обжатие</div>
                     <div className="font-normal text-xs">%</div>
@@ -569,7 +569,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                       className={`hover:bg-primary/10 transition-colors ${index % 2 === 0 ? 'bg-muted/50' : ''} ${isChanged ? 'animate-highlight' : ''}`}
                     >
                       <td
-                        className={`sticky left-0 z-10 p-2 text-center font-medium ${isAverage ? 'text-red-500' : ''} ${index % 2 === 0 ? 'bg-muted/50' : 'bg-card'}`}
+                        className={`sticky left-0 z-10 p-2 text-center font-medium print:static print:bg-transparent print:border print:border-gray-300 ${isAverage ? 'text-red-500' : ''} ${index % 2 === 0 ? 'bg-muted/50' : 'bg-card'}`}
                         title={isAverage ? 'Блок со средним обжатием' : undefined}
                       >
                         {block.blockNumber}
@@ -589,7 +589,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                             onChange={(v) => handleDiameterChange(index, v)}
                           />
                         ) : (
-                          <span className="text-muted-foreground font-medium">
+                          <span className="font-bold print:text-black">
                             {block.diameter.toFixed(2)}
                           </span>
                         )}
@@ -603,7 +603,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                             onChange={(v) => handleStrengthChange(index, v, true)}
                           />
                         ) : (
-                          <span className="font-semibold" style={{ color: 'hsl(140 60% 45%)' }}>
+                          <span className="font-bold print:!text-black" style={{ color: 'hsl(140 60% 45%)' }}>
                             {strengthMinNewton}
                           </span>
                         )}
@@ -616,7 +616,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                             onChange={(v) => handleStrengthChange(index, v, false)}
                           />
                         ) : (
-                          <span className="font-semibold" style={{ color: 'hsl(140 60% 45%)' }}>
+                          <span className="font-bold print:!text-black" style={{ color: 'hsl(140 60% 45%)' }}>
                             {strengthMaxNewton}
                           </span>
                         )}
