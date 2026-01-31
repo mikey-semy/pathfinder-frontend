@@ -435,6 +435,8 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
   const finalStrengthMin = lastBlock?.tensileStrengthMin || summary.finalTensileStrength.min;
   const finalStrengthMax = lastBlock?.tensileStrengthMax || summary.finalTensileStrength.max;
 
+  const finalStrengthMinNewton = Math.round(finalStrengthMin * KGF_TO_NEWTON);
+  const finalStrengthMaxNewton = Math.round(finalStrengthMax * KGF_TO_NEWTON);
   const vsrGpMin = Math.round((finalStrengthMin - 5) * KGF_TO_NEWTON);
   const vsrGpMax = Math.round((finalStrengthMax - 5) * KGF_TO_NEWTON);
 
@@ -451,19 +453,19 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
             <div className="grid grid-cols-2 lg:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Общее обжатие</p>
-                <p className="text-2xl font-semibold">{basic.totalReduction.toFixed(2)}%</p>
+                <p className="text-2xl font-semibold cursor-help" title="Суммарное обжатие от начальной заготовки до готовой проволоки (%)">{basic.totalReduction.toFixed(2)}%</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Среднее обжатие</p>
-                <p className="text-2xl font-semibold">{basic.averageReduction.toFixed(2)}%</p>
+                <p className="text-2xl font-semibold cursor-help" title="Среднее единичное обжатие на один переход (%)">{basic.averageReduction.toFixed(2)}%</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Производительность</p>
-                <p className="text-2xl font-semibold">{basic.kgPerHour.toFixed(2)} кг/ч</p>
+                <p className="text-2xl font-semibold cursor-help" title="Производительность волочильного стана (кг/ч)">{basic.kgPerHour.toFixed(2)} кг/ч</p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">За 8 часов</p>
-                <p className="text-2xl font-semibold">{basic.tonnesPer8Hours.toFixed(3)} т</p>
+                <p className="text-2xl font-semibold cursor-help" title="Производительность за 8-часовую смену (тонн)">{basic.tonnesPer8Hours.toFixed(3)} т</p>
               </div>
             </div>
           </CardContent>
@@ -478,19 +480,19 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">σв мин/макс</p>
-                <p className="text-xl font-semibold whitespace-nowrap">
-                  {finalStrengthMin.toFixed(0)}-{finalStrengthMax.toFixed(0)} кгс/мм²
+                <p className="text-xl font-semibold whitespace-nowrap cursor-help" title="Временное сопротивление разрыву готовой проволоки - минимальное/максимальное (Н/мм²)">
+                  {finalStrengthMinNewton}-{finalStrengthMaxNewton} Н/мм²
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">ВСР ГП</p>
-                <p className="text-xl font-semibold whitespace-nowrap" style={{ color: 'hsl(140 60% 45%)' }}>
+                <p className="text-xl font-semibold whitespace-nowrap cursor-help" style={{ color: 'hsl(140 60% 45%)' }} title="Временное сопротивление разрыву готовой проволоки по ГОСТ (Н/мм²)">
                   {vsrGpMin}-{vsrGpMax} Н/мм²
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-sm text-muted-foreground">Удлинение</p>
-                <p className="text-xl font-semibold">{summary.wireElongation.toFixed(2)}%</p>
+                <p className="text-xl font-semibold cursor-help" title="Относительное удлинение готовой проволоки (%)">{summary.wireElongation.toFixed(2)}%</p>
               </div>
             </div>
           </CardContent>
@@ -511,7 +513,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
         <div className="flex-1 border p-2 rounded">
           <h3 className="font-bold mb-1">Итоговые показатели</h3>
           <div className="flex flex-col gap-y-1">
-            <div><span className="text-gray-600 text-xs">σв мин/макс:</span> <strong>{finalStrengthMin.toFixed(0)}-{finalStrengthMax.toFixed(0)} кгс/мм²</strong></div>
+            <div><span className="text-gray-600 text-xs">σв мин/макс:</span> <strong>{finalStrengthMinNewton}-{finalStrengthMaxNewton} Н/мм²</strong></div>
             <div><span className="text-gray-600 text-xs">ВСР ГП:</span> <strong>{vsrGpMin}-{vsrGpMax} Н/мм²</strong></div>
             <div><span className="text-gray-600 text-xs">Удлинение:</span> <strong>{summary.wireElongation.toFixed(2)}%</strong></div>
           </div>
@@ -531,24 +533,24 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
             <table className="w-full text-sm min-w-[700px] print:min-w-0 print:table-fixed print:border-collapse print:[&_th]:border print:[&_th]:border-gray-300 print:[&_td]:border print:[&_td]:border-gray-300">
               <thead>
                 <tr className="border-b">
-                  <th className="sticky left-0 z-10 bg-card w-12 text-center p-2 font-semibold print:static print:bg-transparent">Блок</th>
-                  <th className="text-center p-2 font-semibold min-w-[80px]">
+                  <th className="sticky left-0 z-10 bg-card w-12 text-center p-2 font-semibold print:static print:bg-transparent cursor-help" title="Номер блока волочения">Блок</th>
+                  <th className="text-center p-2 font-semibold min-w-[80px] cursor-help" title="Единичное обжатие на данном переходе (%)">
                     <div>Обжатие</div>
                     <div className="font-normal text-xs">%</div>
                   </th>
-                  <th className="text-center p-2 font-semibold min-w-[80px]">
+                  <th className="text-center p-2 font-semibold min-w-[80px] cursor-help" title="Диаметр проволоки после прохода через волоку (мм)">
                     <div>Диаметр</div>
                     <div className="font-normal text-xs">мм</div>
                   </th>
-                  <th className="text-center p-2 font-semibold min-w-[70px]">
+                  <th className="text-center p-2 font-semibold min-w-[70px] cursor-help" title="Суммарное обжатие от начала до данного блока (%)">
                     <div>Σ Обжатие</div>
                     <div className="font-normal text-xs">%</div>
                   </th>
-                  <th className="text-center p-2 font-semibold min-w-[90px]">
+                  <th className="text-center p-2 font-semibold min-w-[90px] cursor-help" title="Временное сопротивление разрыву - минимальное (Н/мм²)">
                     <div>σв мин</div>
                     <div className="font-normal text-xs">Н/мм²</div>
                   </th>
-                  <th className="text-center p-2 font-semibold min-w-[90px]">
+                  <th className="text-center p-2 font-semibold min-w-[90px] cursor-help" title="Временное сопротивление разрыву - максимальное (Н/мм²)">
                     <div>σв макс</div>
                     <div className="font-normal text-xs">Н/мм²</div>
                   </th>
