@@ -75,18 +75,20 @@ function calculateTotalReductionAtBlock(initialSize: number, currentDiameter: nu
 
 /**
  * Расчет предела прочности σв
- * Формула из Excel (строка 20-21):
- * D13 + (0.6 * ($D$12 + INSIZE/40 + N18) * (N$17 * 100)) / ((LOG(100 - N$17*100))/2 + 0.0005 * N$17*100)
+ * АЛЬТЕРНАТИВНАЯ ФОРМУЛА (v3-coeff)
  *
- * Где:
- * - N$17 = общее обжатие (totalReduction) в процентах (например 89.44 для 89.44%)
- * - N18 = единичное обжатие блока (unitReduction) в процентах (например 19.9 для 19.9%)
+ * Отличия от Excel-версии:
+ * - Коэффициент уменьшен с 0.6 до 0.4
+ * - Это даёт примерно на 33% меньшие приращения ВСР
+ *
+ * Формула:
+ * σв = σ₀ + (0.4 * (C + INSIZE/40 + unitReduction) * totalReduction) / ((LOG(100 - totalReduction))/2 + 0.0005 * totalReduction)
  *
  * @param prevStrength - Предыдущий предел прочности, кгс/мм²
  * @param carbonContent - Содержание углерода (0.82 для 82%)
  * @param initialSize - Начальный диаметр, мм
- * @param totalReduction - Общее обжатие N$17, % (89.44 для 89.44%)
- * @param unitReduction - Единичное обжатие блока N18, % (19.9 для 19.9%)
+ * @param totalReduction - Общее обжатие, % (89.44 для 89.44%)
+ * @param unitReduction - Единичное обжатие блока, % (19.9 для 19.9%)
  * @returns Предел прочности, кгс/мм²
  */
 function calculateTensileStrength(
@@ -96,13 +98,12 @@ function calculateTensileStrength(
   totalReduction: number,
   unitReduction: number
 ): number {
-  // N$17 = общее обжатие (totalReduction) в процентах
-  // N18 = единичное обжатие блока (unitReduction) в процентах
+  // Коэффициент уменьшен с 0.6 до 0.4 для более консервативных значений
+  const STRENGTH_COEFFICIENT = 0.4;
 
-  // Numerator: 0.6 * (carbonContent + INSIZE/40 + N18) * (N$17 * 100)
-  // N18 делим на 100 чтобы привести к доле для сложения с carbonContent
+  // Numerator: 0.4 * (carbonContent + INSIZE/40 + unitReduction/100) * totalReduction
   const numerator =
-    0.6 *
+    STRENGTH_COEFFICIENT *
     (carbonContent + initialSize / 40 + unitReduction / 100) *
     totalReduction;
 
