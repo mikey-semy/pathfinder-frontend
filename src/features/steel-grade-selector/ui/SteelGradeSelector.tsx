@@ -8,6 +8,16 @@ import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+
+// Парсинг числа с учётом запятой как десятичного разделителя
+const parseNumber = (value: string): number => {
+  return parseFloat(value.replace(',', '.'));
+};
+
+// Форматирование числа с запятой
+const formatNumber = (value: number, decimals: number = 2): string => {
+  return value.toFixed(decimals).replace('.', ',');
+};
 import {
   Dialog,
   DialogContent,
@@ -15,7 +25,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { useSteelGradesStore, type SteelGrade } from '@/shared/store';
 import { Search, Plus, Pencil, Trash2, Check, ChevronDown } from 'lucide-react';
@@ -29,8 +38,10 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
   value,
   onChange,
 }) => {
-  const { customGrades, addGrade, updateGrade, removeGrade, getAllGrades, getGradeById } =
+  // Подписываемся на customGrades чтобы компонент перерендеривался при изменениях
+  const { customGrades, addGrade, updateGrade, removeGrade, getGradeById } =
     useSteelGradesStore();
+  const { getAllGrades } = useSteelGradesStore.getState();
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -46,8 +57,9 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
     tensileMax: '',
   });
 
-  const allGrades = getAllGrades();
-  const selectedGrade = getGradeById(value);
+  // Реактивно обновляем список при изменении customGrades
+  const allGrades = useMemo(() => getAllGrades(), [customGrades]);
+  const selectedGrade = useMemo(() => getGradeById(value), [value, customGrades]);
 
   // Фильтрация по поиску
   const filteredGrades = useMemo(() => {
@@ -96,19 +108,26 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
     const gradeData = {
       name: formData.name.trim(),
       carbonContent: {
-        min: parseFloat(formData.carbonMin),
-        max: parseFloat(formData.carbonMax),
+        min: parseNumber(formData.carbonMin),
+        max: parseNumber(formData.carbonMax),
       },
       tensileStrength: {
-        min: parseFloat(formData.tensileMin),
-        max: parseFloat(formData.tensileMax),
+        min: parseNumber(formData.tensileMin),
+        max: parseNumber(formData.tensileMax),
       },
     };
 
     if (editingGrade) {
       updateGrade(editingGrade.id, gradeData);
     } else {
-      addGrade(gradeData);
+      // Добавляем и сразу выбираем новую марку
+      const newId = addGrade(gradeData);
+      const newGrade: SteelGrade = {
+        ...gradeData,
+        id: newId,
+        isCustom: true,
+      };
+      onChange(newId, newGrade);
     }
 
     setIsAddDialogOpen(false);
@@ -126,10 +145,10 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
 
   const isFormValid =
     formData.name.trim() &&
-    !isNaN(parseFloat(formData.carbonMin)) &&
-    !isNaN(parseFloat(formData.carbonMax)) &&
-    !isNaN(parseFloat(formData.tensileMin)) &&
-    !isNaN(parseFloat(formData.tensileMax));
+    !isNaN(parseNumber(formData.carbonMin)) &&
+    !isNaN(parseNumber(formData.carbonMax)) &&
+    !isNaN(parseNumber(formData.tensileMin)) &&
+    !isNaN(parseNumber(formData.tensileMax));
 
   return (
     <div className="space-y-2">
@@ -150,8 +169,13 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
         </Button>
 
         {/* Выпадающий список */}
-        {isOpen && (
-          <div className="absolute z-50 w-full mt-1 bg-popover border rounded-md shadow-lg">
+        <div
+          className={`absolute z-50 w-full mt-1 bg-popover border rounded-md shadow-lg transition-all duration-200 origin-top ${
+            isOpen
+              ? 'opacity-100 scale-100 pointer-events-auto'
+              : 'opacity-0 scale-95 pointer-events-none'
+          }`}
+        >
             {/* Поиск */}
             <div className="p-2 border-b">
               <div className="relative">
@@ -161,7 +185,7 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-8"
-                  autoFocus
+                  autoFocus={isOpen}
                 />
               </div>
             </div>
@@ -190,7 +214,7 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                         {grade.name}
                       </span>
                       <span className="text-xs text-muted-foreground">
-                        C: {grade.carbonContent.min}-{grade.carbonContent.max}%
+                        C: {formatNumber(grade.carbonContent.min)}-{formatNumber(grade.carbonContent.max)}%
                       </span>
                     </button>
 
@@ -245,16 +269,15 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
               </Button>
             </div>
           </div>
-        )}
       </div>
 
       {/* Информация о выбранной марке */}
-      {selectedGrade && (
-        <p className="text-xs text-muted-foreground">
-          C: {selectedGrade.carbonContent.min}-{selectedGrade.carbonContent.max}% |
-          σв: {selectedGrade.tensileStrength.min}-{selectedGrade.tensileStrength.max} кгс/мм²
-        </p>
-      )}
+      <p className={`text-xs text-muted-foreground min-h-[1.25rem] ${selectedGrade ? 'opacity-100' : 'opacity-0'}`}>
+        {selectedGrade ? (
+          <>C: {formatNumber(selectedGrade.carbonContent.min)}-{formatNumber(selectedGrade.carbonContent.max)}% |
+          σв: {selectedGrade.tensileStrength.min}-{selectedGrade.tensileStrength.max} кгс/мм²</>
+        ) : '\u00A0'}
+      </p>
 
       {/* Диалог добавления/редактирования */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
@@ -273,7 +296,7 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
               <Label htmlFor="gradeName">Название марки</Label>
               <Input
                 id="gradeName"
-                placeholder="K85"
+                placeholder="70, 85, 90..."
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
@@ -286,9 +309,9 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                 <Label htmlFor="carbonMin">Углерод мин (%)</Label>
                 <Input
                   id="carbonMin"
-                  type="number"
-                  step="0.01"
-                  placeholder="0.75"
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="0,75"
                   value={formData.carbonMin}
                   onChange={(e) =>
                     setFormData({ ...formData, carbonMin: e.target.value })
@@ -299,9 +322,9 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                 <Label htmlFor="carbonMax">Углерод макс (%)</Label>
                 <Input
                   id="carbonMax"
-                  type="number"
-                  step="0.01"
-                  placeholder="0.85"
+                  type="text"
+                  inputMode="decimal"
+                  placeholder="0,85"
                   value={formData.carbonMax}
                   onChange={(e) =>
                     setFormData({ ...formData, carbonMax: e.target.value })
@@ -315,8 +338,8 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                 <Label htmlFor="tensileMin">σв мин (кгс/мм²)</Label>
                 <Input
                   id="tensileMin"
-                  type="number"
-                  step="1"
+                  type="text"
+                  inputMode="numeric"
                   placeholder="130"
                   value={formData.tensileMin}
                   onChange={(e) =>
@@ -328,8 +351,8 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                 <Label htmlFor="tensileMax">σв макс (кгс/мм²)</Label>
                 <Input
                   id="tensileMax"
-                  type="number"
-                  step="1"
+                  type="text"
+                  inputMode="numeric"
                   placeholder="133"
                   value={formData.tensileMax}
                   onChange={(e) =>
@@ -359,15 +382,13 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
       </Dialog>
 
       {/* Закрытие при клике вне */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => {
-            setIsOpen(false);
-            setSearchQuery('');
-          }}
-        />
-      )}
+      <div
+        className={`fixed inset-0 z-40 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+        onClick={() => {
+          setIsOpen(false);
+          setSearchQuery('');
+        }}
+      />
     </div>
   );
 };

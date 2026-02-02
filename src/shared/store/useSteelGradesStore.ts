@@ -20,11 +20,11 @@ export interface SteelGrade {
   isCustom?: boolean;
 }
 
-// Базовые марки стали (только K85 как пример, остальные добавит пользователь)
+// Базовые марки стали (только 85 как пример, остальные добавит пользователь)
 const DEFAULT_GRADES: SteelGrade[] = [
   {
-    id: 'k85',
-    name: 'K85',
+    id: '85',
+    name: '85',
     carbonContent: { min: 0.75, max: 0.85 },
     tensileStrength: { min: 130, max: 133 },
     isCustom: false,
@@ -36,7 +36,7 @@ interface SteelGradesStore {
   customGrades: SteelGrade[];
 
   // Actions
-  addGrade: (grade: Omit<SteelGrade, 'id' | 'isCustom'>) => void;
+  addGrade: (grade: Omit<SteelGrade, 'id' | 'isCustom'>) => string;
   updateGrade: (id: string, grade: Partial<Omit<SteelGrade, 'id' | 'isCustom'>>) => void;
   removeGrade: (id: string) => void;
 
@@ -53,7 +53,9 @@ export const useSteelGradesStore = create<SteelGradesStore>()(
       customGrades: [],
 
       addGrade: (grade) => {
-        const id = grade.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        // Генерируем уникальный ID на основе имени и timestamp
+        const baseId = grade.name.toLowerCase().replace(/[^a-zа-я0-9]/gi, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'grade';
+        const id = `${baseId}-${Date.now()}`;
         const newGrade: SteelGrade = {
           ...grade,
           id,
@@ -63,6 +65,8 @@ export const useSteelGradesStore = create<SteelGradesStore>()(
         set((state) => ({
           customGrades: [...state.customGrades, newGrade],
         }));
+
+        return id;
       },
 
       updateGrade: (id, updates) => {
