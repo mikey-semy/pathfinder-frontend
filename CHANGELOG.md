@@ -1,6 +1,55 @@
 # История изменений PathFinder
 
-## [Unreleased] - 2025-01-30
+## [v0.4.0] - 2026-02-12
+
+### Добавлено ✨
+
+#### PWA поддержка
+- Манифест приложения (`public/manifest.json`)
+- Иконки для PWA (favicon, apple-touch-icon, android-chrome)
+
+### Изменено 🔄
+
+#### Единицы измерения
+- σв (предел прочности) теперь отображается в **Н/мм²** вместо кгс/мм²
+- Автоматическая конвертация между формой (Н/мм²) и расчётным движком (кгс/мм²)
+- Обновлены значения по умолчанию: 130-133 кгс/мм² → 1275-1305 Н/мм²
+
+#### Формула ВСР (по требованию заказчика)
+- Изменён коэффициент приращения прочности с **0.6 на 0.4**
+- Формула: `0.4 × (C + d₀/40 + ε) × Σε`
+- Подробности в `docs/FORMULA_VERIFICATION.md`
+
+#### Идентификаторы марок стали
+- Упрощены с `k85` до `85` (только числовые)
+
+### Рефакторинг 🔨
+
+#### Миграция на FSD структуру
+- Всё перенесено в `src/` директорию
+- `app/` → `src/app/`
+- `components/ui/` → `src/shared/ui/`
+- `lib/` → `src/shared/lib/`
+- `ThemeProvider` → `src/app/providers/`
+- `ThemeToggle` → `src/features/theme-toggle/`
+- `HelpModal` → `src/features/help-modal/`
+
+#### Очистка проекта
+- Удалены пустые папки-заготовки (widgets, entities/steel-grade, app/providers, etc.)
+- Удалены все feature-ветки, код слит в master
+
+### Структура проекта
+```
+src/
+├── app/              # Next.js App Router + providers
+├── entities/         # Бизнес-сущности (calculation)
+├── features/         # Фичи (form, export, theme-toggle, help-modal, etc.)
+└── shared/           # Переиспользуемое (ui, store, lib)
+```
+
+---
+
+## [v0.3.0] - 2026-01-30
 
 ### Добавлено ✨
 
