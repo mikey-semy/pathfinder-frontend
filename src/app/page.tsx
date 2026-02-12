@@ -76,9 +76,16 @@ const Logo: React.FC = () => {
   );
 };
 
+// Константа для конвертации кгс/мм² → Н/мм²
+const KGF_TO_NEWTON = 9.81;
+
 // Компонент для отображения входных данных при печати
 const PrintInputs: React.FC<{ result: CalculationResult }> = ({ result }) => {
   const { inputs } = result;
+  // Конвертируем σв из внутренних кгс/мм² в Н/мм² для отображения
+  const tensileStrengthMin = Math.round(inputs.patentedTensileStrength.min * KGF_TO_NEWTON);
+  const tensileStrengthMax = Math.round(inputs.patentedTensileStrength.max * KGF_TO_NEWTON);
+
   return (
     <div className="hidden print:block mb-4 p-2 border rounded text-sm">
       <h3 className="font-bold mb-1">Входные параметры</h3>
@@ -90,7 +97,7 @@ const PrintInputs: React.FC<{ result: CalculationResult }> = ({ result }) => {
         <div>Переходов: <strong>{inputs.totalTransitions}</strong></div>
         <div>Скорость волочения: <strong>{inputs.drawingVelocity} м/с</strong></div>
         <div>Обжатие в посл. волоке: <strong>{inputs.lastDieReduction}%</strong></div>
-        <div>σв заготовки: <strong>{inputs.patentedTensileStrength.min}-{inputs.patentedTensileStrength.max} Н/мм²</strong></div>
+        <div>σв заготовки: <strong>{tensileStrengthMin}-{tensileStrengthMax} Н/мм²</strong></div>
         <div>Углерод: <strong>{inputs.carbonContent.min}-{inputs.carbonContent.max}%</strong></div>
       </div>
     </div>
