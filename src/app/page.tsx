@@ -31,15 +31,16 @@ const Logo: React.FC = () => {
   const [hearts, setHearts] = useState<{ id: number; style: React.CSSProperties }[]>([]);
 
   const spawnHearts = useCallback(() => {
-    const newHearts = Array.from({ length: 12 }, (_, i) => ({
+    const newHearts = Array.from({ length: 15 }, (_, i) => ({
       id: Date.now() + i,
       style: {
-        left: `${50 + (Math.random() - 0.5) * 60}%`,
-        top: '50%',
-        '--tx': `${(Math.random() - 0.5) * 100}px`,
-        '--ty': `${-80 - Math.random() * 60}px`,
-        '--r': `${(Math.random() - 0.5) * 60}deg`,
-        animationDelay: `${i * 0.05}s`,
+        left: `${Math.random() * 100}%`,
+        top: '-20px',
+        '--tx': `${(Math.random() - 0.5) * 80}px`,
+        '--ty': `${150 + Math.random() * 100}px`,
+        '--r': `${(Math.random() - 0.5) * 90}deg`,
+        animationDelay: `${Math.random() * 0.5}s`,
+        animationDuration: `${1.5 + Math.random() * 1}s`,
       } as React.CSSProperties,
     }));
 
@@ -48,7 +49,7 @@ const Logo: React.FC = () => {
     // Убираем сердечки после анимации
     setTimeout(() => {
       setHearts(prev => prev.filter(h => !newHearts.find(nh => nh.id === h.id)));
-    }, 1500);
+    }, 3000);
   }, []);
 
   const handleClick = () => {
