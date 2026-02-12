@@ -5,9 +5,9 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Button } from '@/shared/ui/button';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
 
 // Парсинг числа с учётом запятой как десятичного разделителя
 const parseNumber = (value: string): number => {
@@ -25,7 +25,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/shared/ui/dialog';
 import { useSteelGradesStore, type SteelGrade } from '@/shared/store';
 import { Search, Plus, Pencil, Trash2, Check, ChevronDown } from 'lucide-react';
 

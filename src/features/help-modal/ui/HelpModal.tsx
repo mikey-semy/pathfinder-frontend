@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { HelpCircle, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 
 export const HelpModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);

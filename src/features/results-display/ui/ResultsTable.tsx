@@ -13,8 +13,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
+} from '@/shared/ui/card';
+import { Input } from '@/shared/ui/input';
 import type { CalculationResult } from '@/entities/calculation';
 
 interface ResultsTableProps {

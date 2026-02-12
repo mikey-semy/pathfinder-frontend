@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import { useTheme } from 'next-themes';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();

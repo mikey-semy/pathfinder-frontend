@@ -9,8 +9,8 @@ import { CalculationForm } from '@/features/calculation-form';
 import { ResultsTable } from '@/features/results-display';
 import { CalculationHistory } from '@/features/calculation-history';
 import { ExportButton } from '@/features/results-export';
-import { ThemeToggle } from '@/shared/ui/ThemeToggle';
-import { HelpModal } from '@/shared/ui/HelpModal';
+import { ThemeToggle } from '@/features/theme-toggle';
+import { HelpModal } from '@/features/help-modal';
 import { useCalculationStore } from '@/shared/store';
 import type { CalculationResult } from '@/entities/calculation';
 

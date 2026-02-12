@@ -12,8 +12,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+} from '@/shared/ui/card';
+import { Button } from '@/shared/ui/button';
 import { useCalculationStore } from '@/shared/store';
 import { Upload, Trash2, History } from 'lucide-react';
 
