@@ -340,7 +340,7 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                   id="tensileMin"
                   type="text"
                   inputMode="numeric"
-                  placeholder="130"
+                  placeholder="1275"
                   value={formData.tensileMin}
                   onChange={(e) =>
                     setFormData({ ...formData, tensileMin: e.target.value })
@@ -353,7 +353,7 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                   id="tensileMax"
                   type="text"
                   inputMode="numeric"
-                  placeholder="133"
+                  placeholder="1305"
                   value={formData.tensileMax}
                   onChange={(e) =>
                     setFormData({ ...formData, tensileMax: e.target.value })
