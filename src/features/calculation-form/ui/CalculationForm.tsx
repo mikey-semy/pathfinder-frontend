@@ -271,6 +271,36 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
               Параметры процесса волочения
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Тип волочения */}
+              <div className="space-y-2 md:col-span-2 lg:col-span-3">
+                <Label>Тип волочения <span className="text-destructive">*</span></Label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      value="dry"
+                      {...register('drawingType')}
+                      className="w-4 h-4"
+                    />
+                    <span>Сухое</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      value="wet"
+                      {...register('drawingType')}
+                      className="w-4 h-4"
+                    />
+                    <span>Мокрое</span>
+                  </label>
+                </div>
+                {errors.drawingType && (
+                  <p className="text-sm text-destructive">
+                    {errors.drawingType.message}
+                  </p>
+                )}
+              </div>
+
               {/* Количество переходов */}
               <div className="space-y-2">
                 <Label htmlFor="totalTransitions">

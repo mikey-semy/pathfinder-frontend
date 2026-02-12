@@ -18,6 +18,7 @@ export function formDataToInputParams(
 ): InputParams {
   return {
     rodType: formData.rodType,
+    drawingType: formData.drawingType,
     initialWireSize: formData.initialWireSize,
     finalWireSize: formData.finalWireSize,
     carbonContent: {
@@ -46,6 +47,7 @@ export function inputParamsToFormData(
 ): PathfinderFormData {
   return {
     rodType: params.rodType,
+    drawingType: params.drawingType,
     initialWireSize: params.initialWireSize,
     finalWireSize: params.finalWireSize,
     carbonContentMin: params.carbonContent.min,

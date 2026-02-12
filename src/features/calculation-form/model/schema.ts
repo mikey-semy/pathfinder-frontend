@@ -16,6 +16,11 @@ export const pathfinderFormSchema = z
       .string({ message: 'Выберите тип заготовки' })
       .min(1, 'Тип заготовки обязателен'),
 
+    // Тип волочения
+    drawingType: z.enum(['dry', 'wet'], {
+      message: 'Выберите тип волочения',
+    }),
+
     // Диаметр заготовки
     initialWireSize: z
       .number({ message: 'Укажите диаметр заготовки' })
@@ -116,6 +121,7 @@ export type PathfinderFormData = z.infer<typeof pathfinderFormSchema>;
  */
 export const defaultFormValues: PathfinderFormData = {
   rodType: '85',
+  drawingType: 'dry',
   initialWireSize: 4.0,
   finalWireSize: 1.3,
   carbonContentMin: 0.75,

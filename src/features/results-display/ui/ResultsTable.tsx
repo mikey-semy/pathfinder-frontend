@@ -149,8 +149,13 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
     setChangedRows(new Set());
   }, [result]);
 
-  // Расчет σв по формуле
-  // Коэффициент 0.42 — для σв мин/макс в диапазоне 1680-1900 (синхронизировано с stage2-blocks.ts)
+  // Коэффициенты для расчета σв в зависимости от типа волочения
+  const STRENGTH_COEFFICIENTS = {
+    dry: 0.42,  // Сухое волочение
+    wet: 0.6,   // Мокрое волочение
+  };
+
+  // Расчет σв по формуле (синхронизировано с stage2-blocks.ts)
   const calculateTensileStrength = useCallback((
     prevStrength: number,
     carbonContent: number,
@@ -158,7 +163,8 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
     totalReduction: number,
     unitReduction: number
   ): number => {
-    const STRENGTH_COEFFICIENT = 0.42;
+    const drawingType = inputs.drawingType || 'dry';
+    const STRENGTH_COEFFICIENT = STRENGTH_COEFFICIENTS[drawingType];
 
     const numerator =
       STRENGTH_COEFFICIENT *
@@ -172,7 +178,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
 
     const increment = numerator / denominator;
     return prevStrength + increment;
-  }, []);
+  }, [inputs.drawingType]);
 
   // Пересчет всех значений начиная с указанного индекса
   const recalculateFromIndex = useCallback(

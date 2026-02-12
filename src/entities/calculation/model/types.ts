@@ -3,6 +3,11 @@
  */
 
 /**
+ * Тип волочения
+ */
+export type DrawingType = 'dry' | 'wet';
+
+/**
  * Входные параметры для расчета
  */
 export interface InputParams {
@@ -10,6 +15,7 @@ export interface InputParams {
   rodType: string;                    // Тип заготовки (например, 85)
   initialWireSize: number;            // Диаметр заготовки, мм (E4)
   finalWireSize: number;              // Диаметр готовой проволоки, мм (E5)
+  drawingType: DrawingType;           // Тип волочения (сухое/мокрое)
   carbonContent: {
     min: number;                      // Минимум содержания углерода, % (D12)
     max: number;                      // Максимум содержания углерода, % (E12)

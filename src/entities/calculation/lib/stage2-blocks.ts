@@ -74,28 +74,29 @@ function calculateTotalReductionAtBlock(initialSize: number, currentDiameter: nu
 }
 
 /**
+ * Коэффициенты для расчета σв в зависимости от типа волочения
+ */
+const STRENGTH_COEFFICIENTS = {
+  dry: 0.42,  // Сухое волочение
+  wet: 0.6,   // Мокрое волочение
+} as const;
+
+/**
  * Расчет предела прочности σв
- * АЛЬТЕРНАТИВНАЯ ФОРМУЛА (v4-coeff)
  *
- * Отличия от Excel-версии:
- * - Коэффициент уменьшен с 0.6 до 0.42
- * - Это даёт примерно на 30% меньшие приращения ВСР
- *
- * История изменений коэффициента:
- * - v1 (Excel): 0.6 — завышенные значения (~2000+)
- * - v3: 0.4 — заниженные значения σв (~1640)
- * - v4: 0.5 — высоковато σв (~1780)
- * - v4.1: 0.45 — σв мин 1725 (выше цели 1680)
- * - v4.2: 0.42 — цель σв мин/макс 1680-1900
+ * Коэффициент зависит от типа волочения:
+ * - Сухое волочение: 0.42 (σв ~1680-1900 для стали 85)
+ * - Мокрое волочение: 0.6 (σв ~2000+ для тонкой проволоки)
  *
  * Формула:
- * σв = σ₀ + (0.42 * (C + INSIZE/40 + unitReduction) * totalReduction) / ((LOG(100 - totalReduction))/2 + 0.0005 * totalReduction)
+ * σв = σ₀ + (COEFF * (C + INSIZE/40 + unitReduction) * totalReduction) / ((LOG(100 - totalReduction))/2 + 0.0005 * totalReduction)
  *
  * @param prevStrength - Предыдущий предел прочности, кгс/мм²
  * @param carbonContent - Содержание углерода (0.82 для 82%)
  * @param initialSize - Начальный диаметр, мм
  * @param totalReduction - Общее обжатие, % (89.44 для 89.44%)
  * @param unitReduction - Единичное обжатие блока, % (19.9 для 19.9%)
+ * @param drawingType - Тип волочения ('dry' или 'wet')
  * @returns Предел прочности, кгс/мм²
  */
 function calculateTensileStrength(
@@ -103,10 +104,10 @@ function calculateTensileStrength(
   carbonContent: number,
   initialSize: number,
   totalReduction: number,
-  unitReduction: number
+  unitReduction: number,
+  drawingType: 'dry' | 'wet' = 'dry'
 ): number {
-  // Коэффициент 0.42 — для σв мин/макс в диапазоне 1680-1900
-  const STRENGTH_COEFFICIENT = 0.42;
+  const STRENGTH_COEFFICIENT = STRENGTH_COEFFICIENTS[drawingType];
 
   // Numerator: 0.42 * (carbonContent + INSIZE/40 + unitReduction/100) * totalReduction
   const numerator =
@@ -281,6 +282,7 @@ export function calculateBlocksStage(
     unitReduction,
     carbonContent,
     patentedTensileStrength,
+    drawingType,
   } = params;
 
   const blocks: BlockCalculation[] = [];
@@ -339,7 +341,8 @@ export function calculateBlocksStage(
       carbonContent.min,
       initialWireSize,
       totalReductionValue,
-      unitReductionValue
+      unitReductionValue,
+      drawingType
     );
 
     const strengthMax = calculateTensileStrength(
@@ -347,7 +350,8 @@ export function calculateBlocksStage(
       carbonContent.max,
       initialWireSize,
       totalReductionValue,
-      unitReductionValue
+      unitReductionValue,
+      drawingType
     );
 
     // Используем среднее значение для последующих расчетов

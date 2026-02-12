@@ -20,6 +20,7 @@ export type {
   SummaryCalculations,
   CalculationResult,
   ValidationResult,
+  DrawingType,
 } from './model/types';
 
 // Константы
