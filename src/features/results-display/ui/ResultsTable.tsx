@@ -562,8 +562,9 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                   const isLast = isLastRow(index);
                   const isChanged = changedRows.has(index);
 
-                  const strengthMinNewton = Math.round((block.tensileStrengthMin - 5) * KGF_TO_NEWTON);
-                  const strengthMaxNewton = Math.round((block.tensileStrengthMax - 5) * KGF_TO_NEWTON);
+                  // σв в Н/мм² (без корректировки -5, это для ВСР)
+                  const strengthMinNewton = Math.round(block.tensileStrengthMin * KGF_TO_NEWTON);
+                  const strengthMaxNewton = Math.round(block.tensileStrengthMax * KGF_TO_NEWTON);
 
                   return (
                     <tr
