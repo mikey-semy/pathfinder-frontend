@@ -73,6 +73,7 @@ export const CalculationHistory: React.FC = () => {
                   </span>
                   <span>{item.inputs.totalTransitions} пер.</span>
                   <span>{item.inputs.rodType}</span>
+                  <span>{item.inputs.drawingType === 'wet' ? 'мокрое' : 'сухое'}</span>
                 </div>
               </div>
               <div className="flex gap-1 shrink-0">
