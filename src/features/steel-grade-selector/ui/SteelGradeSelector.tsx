@@ -128,6 +128,15 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
 
     if (editingGrade) {
       updateGrade(editingGrade.id, gradeData);
+      // Если редактируемая марка сейчас выбрана — обновляем форму
+      if (value === editingGrade.id) {
+        const updatedGrade: SteelGrade = {
+          ...gradeData,
+          id: editingGrade.id,
+          isCustom: true,
+        };
+        onChange(editingGrade.id, updatedGrade);
+      }
     } else {
       // Добавляем и сразу выбираем новую марку
       const newId = addGrade(gradeData);
