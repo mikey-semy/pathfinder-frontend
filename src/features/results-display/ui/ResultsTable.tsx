@@ -150,6 +150,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
   }, [result]);
 
   // Расчет σв по формуле
+  // Коэффициент 0.42 — для σв мин/макс в диапазоне 1680-1900 (синхронизировано с stage2-blocks.ts)
   const calculateTensileStrength = useCallback((
     prevStrength: number,
     carbonContent: number,
@@ -157,8 +158,10 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
     totalReduction: number,
     unitReduction: number
   ): number => {
+    const STRENGTH_COEFFICIENT = 0.42;
+
     const numerator =
-      0.6 *
+      STRENGTH_COEFFICIENT *
       (carbonContent + initialSize / 40 + unitReduction / 100) *
       totalReduction;
 
@@ -561,6 +564,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                   const isAverage = block.blockNumber === basic.averageBlockNumber;
                   const isLast = isLastRow(index);
                   const isChanged = changedRows.has(index);
+                  const isHighReduction = block.unitReduction > 25; // Обжатие выше 25% — критично
 
                   // σв в Н/мм² (без корректировки -5, это для ВСР)
                   const strengthMinNewton = Math.round(block.tensileStrengthMin * KGF_TO_NEWTON);
@@ -577,22 +581,24 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                       >
                         {block.blockNumber}
                       </td>
-                      <td className="p-1 text-center">
+                      <td className={`p-1 text-center ${isHighReduction ? 'text-red-500 font-semibold' : ''}`} title={isHighReduction ? 'Обжатие выше 25%!' : undefined}>
                         <EditableCell
                           value={block.unitReduction}
                           decimals={2}
                           onChange={(v) => isLast ? handleLastRowReductionChange(v) : handleReductionChange(index, v)}
+                          className={isHighReduction ? 'text-red-500' : ''}
                         />
                       </td>
-                      <td className="p-1 text-center">
+                      <td className={`p-1 text-center ${isHighReduction ? 'text-red-500 font-semibold' : ''}`} title={isHighReduction ? 'Обжатие выше 25%!' : undefined}>
                         {!isLast ? (
                           <EditableCell
                             value={block.diameter}
                             decimals={2}
                             onChange={(v) => handleDiameterChange(index, v)}
+                            className={isHighReduction ? 'text-red-500' : ''}
                           />
                         ) : (
-                          <span className="font-bold print:text-black">
+                          <span className={`font-bold print:text-black ${isHighReduction ? 'text-red-500' : ''}`}>
                             {block.diameter.toFixed(2)}
                           </span>
                         )}
