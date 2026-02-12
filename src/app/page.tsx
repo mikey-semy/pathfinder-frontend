@@ -5,6 +5,7 @@
  * Расчет маршрутов волочения проволоки
  */
 
+import { useState, useCallback } from 'react';
 import { CalculationForm } from '@/features/calculation-form';
 import { ResultsTable } from '@/features/results-display';
 import { CalculationHistory } from '@/features/calculation-history';
@@ -13,6 +14,66 @@ import { ThemeToggle } from '@/features/theme-toggle';
 import { HelpModal } from '@/features/help-modal';
 import { useCalculationStore } from '@/shared/store';
 import type { CalculationResult } from '@/entities/calculation';
+
+// Компонент сердечка для анимации
+const Heart: React.FC<{ style: React.CSSProperties }> = ({ style }) => (
+  <span
+    className="absolute pointer-events-none text-2xl animate-float-heart"
+    style={style}
+  >
+    ❤️
+  </span>
+);
+
+// Компонент логотипа с пасхалкой
+const Logo: React.FC = () => {
+  const [clickCount, setClickCount] = useState(0);
+  const [hearts, setHearts] = useState<{ id: number; style: React.CSSProperties }[]>([]);
+
+  const spawnHearts = useCallback(() => {
+    const newHearts = Array.from({ length: 12 }, (_, i) => ({
+      id: Date.now() + i,
+      style: {
+        left: `${50 + (Math.random() - 0.5) * 60}%`,
+        top: '50%',
+        '--tx': `${(Math.random() - 0.5) * 100}px`,
+        '--ty': `${-80 - Math.random() * 60}px`,
+        '--r': `${(Math.random() - 0.5) * 60}deg`,
+        animationDelay: `${i * 0.05}s`,
+      } as React.CSSProperties,
+    }));
+
+    setHearts(prev => [...prev, ...newHearts]);
+
+    // Убираем сердечки после анимации
+    setTimeout(() => {
+      setHearts(prev => prev.filter(h => !newHearts.find(nh => nh.id === h.id)));
+    }, 1500);
+  }, []);
+
+  const handleClick = () => {
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+
+    if (newCount >= 10) {
+      spawnHearts();
+      setClickCount(0);
+    }
+  };
+
+  return (
+    <h1
+      className="text-lg sm:text-xl font-bold tracking-tight cursor-pointer select-none relative"
+      style={{ color: "hsl(var(--foreground))" }}
+      onClick={handleClick}
+    >
+      PathFinder
+      {hearts.map(heart => (
+        <Heart key={heart.id} style={heart.style} />
+      ))}
+    </h1>
+  );
+};
 
 // Компонент для отображения входных данных при печати
 const PrintInputs: React.FC<{ result: CalculationResult }> = ({ result }) => {
@@ -60,12 +121,7 @@ export default function Home() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 max-w-7xl">
         {/* Заголовок приложения */}
         <header className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
-          <h1
-            className="text-lg sm:text-xl font-bold tracking-tight"
-            style={{ color: "hsl(var(--foreground))" }}
-          >
-            PathFinder
-          </h1>
+          <Logo />
           <div className="flex items-center gap-2 no-print">
             <p
               className="text-xs sm:text-sm"

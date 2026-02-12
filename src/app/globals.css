@@ -293,6 +293,26 @@
   animation: text-highlight-dark 1s ease-out;
 }
 
+/* Анимация сердечек (пасхалка) */
+@keyframes float-heart {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(var(--tx), calc(var(--ty) * 0.5)) rotate(var(--r)) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) rotate(var(--r)) scale(0.8);
+  }
+}
+
+.animate-float-heart {
+  animation: float-heart 1.2s ease-out forwards;
+}
+
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
