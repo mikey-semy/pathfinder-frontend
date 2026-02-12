@@ -54,6 +54,7 @@
 
   html {
     color-scheme: light;
+    overflow-x: auto;
   }
 
   html.dark {
