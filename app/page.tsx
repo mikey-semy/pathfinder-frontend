@@ -28,7 +28,7 @@ const PrintInputs: React.FC<{ result: CalculationResult }> = ({ result }) => {
         <div>Переходов: <strong>{inputs.totalTransitions}</strong></div>
         <div>Скорость волочения: <strong>{inputs.drawingVelocity} м/с</strong></div>
         <div>Обжатие в посл. волоке: <strong>{inputs.lastDieReduction}%</strong></div>
-        <div>σв заготовки: <strong>{inputs.patentedTensileStrength.min}-{inputs.patentedTensileStrength.max} кгс/мм²</strong></div>
+        <div>σв заготовки: <strong>{inputs.patentedTensileStrength.min}-{inputs.patentedTensileStrength.max} Н/мм²</strong></div>
         <div>Углерод: <strong>{inputs.carbonContent.min}-{inputs.carbonContent.max}%</strong></div>
       </div>
     </div>

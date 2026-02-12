@@ -20,13 +20,17 @@ export interface SteelGrade {
   isCustom?: boolean;
 }
 
+// Константа для преобразования кгс/мм² в Н/мм²
+const KGF_TO_NEWTON = 9.81;
+
 // Базовые марки стали (только 85 как пример, остальные добавит пользователь)
+// Значения tensileStrength указаны в Н/мм²
 const DEFAULT_GRADES: SteelGrade[] = [
   {
     id: '85',
     name: '85',
     carbonContent: { min: 0.75, max: 0.85 },
-    tensileStrength: { min: 130, max: 133 },
+    tensileStrength: { min: Math.round(130 * KGF_TO_NEWTON), max: Math.round(133 * KGF_TO_NEWTON) },
     isCustom: false,
   },
 ];

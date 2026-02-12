@@ -7,7 +7,7 @@
  */
 export interface InputParams {
   // Параметры заготовки
-  rodType: string;                    // Тип заготовки (например, k85)
+  rodType: string;                    // Тип заготовки (например, 85)
   initialWireSize: number;            // Диаметр заготовки, мм (E4)
   finalWireSize: number;              // Диаметр готовой проволоки, мм (E5)
   carbonContent: {

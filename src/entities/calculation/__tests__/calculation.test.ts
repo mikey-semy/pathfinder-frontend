@@ -11,7 +11,7 @@ import type { InputParams } from '../model/types';
  * Входные параметры из строк 3-13
  */
 const testParams: InputParams = {
-  rodType: 'k85',
+  rodType: '85',
   initialWireSize: 4.0,               // E4
   finalWireSize: 1.3,                 // E5
   carbonContent: {

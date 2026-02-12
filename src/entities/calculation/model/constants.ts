@@ -56,14 +56,15 @@ export const VALIDATION_RANGES = {
     startBlock: { min: 1, max: 10 },                  // Начальный блок
     lastDieReduction: { min: 0, max: 100 },           // Обжатие, %
     carbonContent: { min: 0, max: 2 },                // Содержание углерода, %
-    tensileStrength: { min: 0, max: 5000 },           // Предел прочности, Н/мм²
+    tensileStrength: { min: 0, max: 5000 },           // Предел прочности для формы, Н/мм²
 } as const;
 
 /**
  * Значения по умолчанию
+ * patentedTensileStrength в кгс/мм² (внутренние расчёты)
  */
 export const DEFAULT_VALUES = {
-    rodType: 'k85',
+    rodType: '85',
     initialWireSize: 4.0,
     finalWireSize: 1.3,
     carbonContent: {
@@ -71,8 +72,8 @@ export const DEFAULT_VALUES = {
         max: 0.85,
     },
     patentedTensileStrength: {
-        min: 130,
-        max: 133,
+        min: 130, // кгс/мм²
+        max: 133, // кгс/мм²
     },
     totalTransitions: 9,
     unitReduction: 0,

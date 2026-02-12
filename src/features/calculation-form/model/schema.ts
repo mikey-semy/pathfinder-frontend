@@ -51,16 +51,16 @@ export const pathfinderFormSchema = z
       .min(VALIDATION_RANGES.carbonContent.min, 'Минимум 0%')
       .max(VALIDATION_RANGES.carbonContent.max, 'Максимум 2%'),
 
-    // Предел прочности патентованной заготовки
+    // Предел прочности патентованной заготовки (в Н/мм²)
     patentedTensileStrengthMin: z
       .number()
-      .min(VALIDATION_RANGES.tensileStrength.min, 'Минимум 0 кгс/мм²')
-      .max(VALIDATION_RANGES.tensileStrength.max, 'Максимум 5000 кгс/мм²'),
+      .min(VALIDATION_RANGES.tensileStrength.min, 'Минимум 0 Н/мм²')
+      .max(VALIDATION_RANGES.tensileStrength.max, 'Максимум 5000 Н/мм²'),
 
     patentedTensileStrengthMax: z
       .number()
-      .min(VALIDATION_RANGES.tensileStrength.min, 'Минимум 0 кгс/мм²')
-      .max(VALIDATION_RANGES.tensileStrength.max, 'Максимум 5000 кгс/мм²'),
+      .min(VALIDATION_RANGES.tensileStrength.min, 'Минимум 0 Н/мм²')
+      .max(VALIDATION_RANGES.tensileStrength.max, 'Максимум 5000 Н/мм²'),
 
     // Количество переходов
     totalTransitions: z
@@ -112,15 +112,16 @@ export type PathfinderFormData = z.infer<typeof pathfinderFormSchema>;
 
 /**
  * Значения по умолчанию для формы
+ * σв указан в Н/мм² (130 кгс/мм² * 9.81 ≈ 1275 Н/мм²)
  */
 export const defaultFormValues: PathfinderFormData = {
-  rodType: 'K85',
+  rodType: '85',
   initialWireSize: 4.0,
   finalWireSize: 1.3,
   carbonContentMin: 0.75,
   carbonContentMax: 0.85,
-  patentedTensileStrengthMin: 130,
-  patentedTensileStrengthMax: 133,
+  patentedTensileStrengthMin: 1275,
+  patentedTensileStrengthMax: 1305,
   totalTransitions: 9,
   drawingVelocity: 9.0,
   startBlock: 1,

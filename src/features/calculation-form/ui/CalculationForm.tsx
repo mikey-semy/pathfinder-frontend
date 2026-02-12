@@ -31,7 +31,7 @@ interface CalculationFormProps {
 export const CalculationForm: React.FC<CalculationFormProps> = ({
   onCalculate,
 }) => {
-  const [selectedSteelGrade, setSelectedSteelGrade] = useState<string>('k85');
+  const [selectedSteelGrade, setSelectedSteelGrade] = useState<string>('85');
   const [isCustomSteel, setIsCustomSteel] = useState(false);
 
   const {
@@ -206,7 +206,7 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
               {/* σв заготовки (мин) */}
               <div className="space-y-2">
                 <Label htmlFor="patentedTensileStrengthMin">
-                  σв заготовки мин (кгс/мм²)
+                  σв заготовки мин (Н/мм²)
                   {!isCustomSteel && (
                     <span className="text-xs text-muted-foreground ml-2">
                       (авто)
@@ -236,7 +236,7 @@ export const CalculationForm: React.FC<CalculationFormProps> = ({
               {/* σв заготовки (макс) */}
               <div className="space-y-2">
                 <Label htmlFor="patentedTensileStrengthMax">
-                  σв заготовки макс (кгс/мм²)
+                  σв заготовки макс (Н/мм²)
                   {!isCustomSteel && (
                     <span className="text-xs text-muted-foreground ml-2">
                       (авто)

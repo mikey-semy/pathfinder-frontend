@@ -275,7 +275,7 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
       <p className={`text-xs text-muted-foreground min-h-[1.25rem] ${selectedGrade ? 'opacity-100' : 'opacity-0'}`}>
         {selectedGrade ? (
           <>C: {formatNumber(selectedGrade.carbonContent.min)}-{formatNumber(selectedGrade.carbonContent.max)}% |
-          σв: {selectedGrade.tensileStrength.min}-{selectedGrade.tensileStrength.max} кгс/мм²</>
+          σв: {selectedGrade.tensileStrength.min}-{selectedGrade.tensileStrength.max} Н/мм²</>
         ) : '\u00A0'}
       </p>
 
@@ -335,7 +335,7 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="tensileMin">σв мин (кгс/мм²)</Label>
+                <Label htmlFor="tensileMin">σв мин (Н/мм²)</Label>
                 <Input
                   id="tensileMin"
                   type="text"
@@ -348,7 +348,7 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="tensileMax">σв макс (кгс/мм²)</Label>
+                <Label htmlFor="tensileMax">σв макс (Н/мм²)</Label>
                 <Input
                   id="tensileMax"
                   type="text"
