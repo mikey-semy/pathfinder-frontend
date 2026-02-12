@@ -4,7 +4,7 @@
  * Компонент выбора марки стали с поиском и управлением
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
@@ -38,10 +38,19 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
   value,
   onChange,
 }) => {
+  // Состояние для предотвращения hydration mismatch
+  const [mounted, setMounted] = useState(false);
+
   // Подписываемся на customGrades чтобы компонент перерендеривался при изменениях
   const { customGrades, addGrade, updateGrade, removeGrade, getGradeById } =
     useSteelGradesStore();
   const { getAllGrades } = useSteelGradesStore.getState();
+
+  // Rehydrate store on mount
+  useEffect(() => {
+    useSteelGradesStore.persist.rehydrate();
+    setMounted(true);
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -363,10 +372,11 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button
               type="button"
               variant="outline"
+              className="w-full sm:w-auto"
               onClick={() => {
                 setIsAddDialogOpen(false);
                 resetForm();
@@ -374,7 +384,12 @@ export const SteelGradeSelector: React.FC<SteelGradeSelectorProps> = ({
             >
               Отмена
             </Button>
-            <Button type="button" onClick={handleSave} disabled={!isFormValid}>
+            <Button
+              type="button"
+              className="w-full sm:w-auto"
+              onClick={handleSave}
+              disabled={!isFormValid}
+            >
               {editingGrade ? 'Сохранить' : 'Добавить'}
             </Button>
           </DialogFooter>

@@ -107,6 +107,7 @@ export const useCalculationStore = create<CalculationStore>()(
         history: state.history,
         maxHistorySize: state.maxHistorySize,
       }),
+      skipHydration: true,
     }
   )
 );

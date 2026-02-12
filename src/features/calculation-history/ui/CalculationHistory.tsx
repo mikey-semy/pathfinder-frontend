@@ -5,7 +5,7 @@
  * Показывает список предыдущих расчетов с возможностью загрузки
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -18,10 +18,18 @@ import { useCalculationStore } from '@/shared/store';
 import { Upload, Trash2, History } from 'lucide-react';
 
 export const CalculationHistory: React.FC = () => {
+  const [mounted, setMounted] = useState(false);
   const { history, loadFromHistory, removeFromHistory, clearHistory } =
     useCalculationStore();
 
-  if (history.length === 0) {
+  // Rehydrate store on mount
+  useEffect(() => {
+    useCalculationStore.persist.rehydrate();
+    setMounted(true);
+  }, []);
+
+  // Не рендерим пока не смонтировались (избегаем hydration mismatch)
+  if (!mounted || history.length === 0) {
     return null;
   }
 

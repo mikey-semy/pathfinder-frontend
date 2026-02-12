@@ -99,6 +99,7 @@ export const useSteelGradesStore = create<SteelGradesStore>()(
     }),
     {
       name: 'pathfinder-steel-grades',
+      skipHydration: true,
     }
   )
 );
