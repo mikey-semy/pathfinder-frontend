@@ -75,14 +75,19 @@ function calculateTotalReductionAtBlock(initialSize: number, currentDiameter: nu
 
 /**
  * Расчет предела прочности σв
- * АЛЬТЕРНАТИВНАЯ ФОРМУЛА (v3-coeff)
+ * АЛЬТЕРНАТИВНАЯ ФОРМУЛА (v4-coeff)
  *
  * Отличия от Excel-версии:
- * - Коэффициент уменьшен с 0.6 до 0.4
- * - Это даёт примерно на 33% меньшие приращения ВСР
+ * - Коэффициент уменьшен с 0.6 до 0.5
+ * - Это даёт примерно на 17% меньшие приращения ВСР
+ *
+ * История изменений коэффициента:
+ * - v1 (Excel): 0.6 — завышенные значения (~2000+)
+ * - v3: 0.4 — заниженные значения (~1640)
+ * - v4: 0.5 — компромисс, ожидаемый диапазон 1680-1900
  *
  * Формула:
- * σв = σ₀ + (0.4 * (C + INSIZE/40 + unitReduction) * totalReduction) / ((LOG(100 - totalReduction))/2 + 0.0005 * totalReduction)
+ * σв = σ₀ + (0.5 * (C + INSIZE/40 + unitReduction) * totalReduction) / ((LOG(100 - totalReduction))/2 + 0.0005 * totalReduction)
  *
  * @param prevStrength - Предыдущий предел прочности, кгс/мм²
  * @param carbonContent - Содержание углерода (0.82 для 82%)
@@ -98,10 +103,10 @@ function calculateTensileStrength(
   totalReduction: number,
   unitReduction: number
 ): number {
-  // Коэффициент уменьшен с 0.6 до 0.4 для более консервативных значений
-  const STRENGTH_COEFFICIENT = 0.4;
+  // Коэффициент 0.5 — компромисс между 0.4 (низко) и 0.6 (высоко)
+  const STRENGTH_COEFFICIENT = 0.5;
 
-  // Numerator: 0.4 * (carbonContent + INSIZE/40 + unitReduction/100) * totalReduction
+  // Numerator: 0.5 * (carbonContent + INSIZE/40 + unitReduction/100) * totalReduction
   const numerator =
     STRENGTH_COEFFICIENT *
     (carbonContent + initialSize / 40 + unitReduction / 100) *
