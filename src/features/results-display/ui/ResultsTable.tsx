@@ -152,7 +152,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
     // Коэффициенты для расчета σв в зависимости от типа волочения
     const STRENGTH_COEFFICIENTS = {
         dry: 0.42,  // Сухое волочение
-        wet: 0.7,   // Мокрое волочение
+        wet: 0.66,  // Мокрое волочение
     };
 
     // Расчет σв по формуле (синхронизировано с stage2-blocks.ts)
@@ -489,13 +489,13 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div className="space-y-1">
                                 <p className="text-sm text-muted-foreground">σв мин/макс</p>
-                                <p className="text-xl font-semibold whitespace-nowrap cursor-help" title="Временное сопротивление разрыву готовой проволоки - минимальное/максимальное (Н/мм²)">
+                                <p className="text-xl font-semibold whitespace-nowrap cursor-help" style={{ color: 'hsl(140 60% 45%)' }} title="Временное сопротивление разрыву готовой проволоки - минимальное/максимальное (Н/мм²)">
                                     {finalStrengthMinNewton}-{finalStrengthMaxNewton} Н/мм²
                                 </p>
                             </div>
                             <div className="space-y-1">
-                                <p className="text-sm text-muted-foreground">ВСР ГП</p>
-                                <p className="text-xl font-semibold whitespace-nowrap cursor-help" style={{ color: 'hsl(140 60% 45%)' }} title="Временное сопротивление разрыву готовой проволоки по ГОСТ (Н/мм²)">
+                                <p className="text-sm text-muted-foreground cursor-help" title="Временное Сопротивление Разрыву Готовой Проволоки = (σв - 10 кгс/мм²) × 9.81">ВСР ГП</p>
+                                <p className="text-xl font-semibold whitespace-nowrap cursor-help" title="Временное Сопротивление Разрыву Готовой Проволоки = (σв - 10 кгс/мм²) × 9.81">
                                     {vsrGpMin}-{vsrGpMax} Н/мм²
                                 </p>
                             </div>
@@ -567,7 +567,6 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                             </thead>
                             <tbody>
                                 {editableBlocks.map((block, index) => {
-                                    const isAverage = block.blockNumber === basic.averageBlockNumber;
                                     const isLast = isLastRow(index);
                                     const isChanged = changedRows.has(index);
                                     const isHighReduction = block.unitReduction > 25; // Обжатие выше 25% — критично
@@ -582,8 +581,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({ result }) => {
                                             className={`hover:bg-primary/10 transition-colors ${index % 2 === 0 ? 'bg-muted/50' : ''} ${isChanged ? 'animate-highlight' : ''}`}
                                         >
                                             <td
-                                                className={`sticky left-0 z-10 p-2 text-center font-medium print:static print:bg-transparent print:border print:border-gray-300 ${isAverage ? 'text-red-500' : ''} ${index % 2 === 0 ? 'bg-muted/50' : 'bg-card'}`}
-                                                title={isAverage ? 'Блок со средним обжатием' : undefined}
+                                                className={`sticky left-0 z-10 p-2 text-center font-medium print:static print:bg-transparent print:border print:border-gray-300 ${index % 2 === 0 ? 'bg-muted/50' : 'bg-card'}`}
                                             >
                                                 {block.blockNumber}
                                             </td>
