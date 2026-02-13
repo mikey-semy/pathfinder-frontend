@@ -78,7 +78,7 @@ function calculateTotalReductionAtBlock(initialSize: number, currentDiameter: nu
  */
 const STRENGTH_COEFFICIENTS = {
   dry: 0.42,  // Сухое волочение
-  wet: 0.68,   // Мокрое волочение
+  wet: 0.66,   // Мокрое волочение
 } as const;
 
 /**
